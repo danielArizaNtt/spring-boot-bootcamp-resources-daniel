@@ -14,6 +14,14 @@ public class GradeController {
 
     List<Grade> studentGrades = new ArrayList<>();
 
+    @GetMapping("/")
+    public String getForm(Model model, @RequestParam(required = false) String id) {
+        int index = getGradeIndex(id);
+        Grade grade = (index == Constants.NOT_FOUND) ? new Grade() : studentGrades.get(index);
+        model.addAttribute("grade", grade);
+        return "form";
+    }
+
     @GetMapping("/grades")
     public String getGrades(Model model) {
         model.addAttribute("grades", studentGrades);
