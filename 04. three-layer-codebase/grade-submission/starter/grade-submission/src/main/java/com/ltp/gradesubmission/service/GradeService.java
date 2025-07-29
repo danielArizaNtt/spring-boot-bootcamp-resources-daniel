@@ -2,19 +2,14 @@ package com.ltp.gradesubmission.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.ltp.gradesubmission.Constants;
 import com.ltp.gradesubmission.Grade;
 import com.ltp.gradesubmission.repository.GradeRepository;
 
-@Service
 public class GradeService {
-    
-    @Autowired
-    GradeRepository gradeRepository;
 
+    GradeRepository gradeRepository = new GradeRepository();
+    
     public Grade getGrade(int index) {
         return gradeRepository.getGrade(index);
     }
@@ -23,25 +18,25 @@ public class GradeService {
         gradeRepository.addGrade(grade);
     }
 
-    public void updateGrade(Grade grade, int index) {
-        gradeRepository.updateGrade(grade, index);
+    public void updateGrade(int index, Grade grade) {
+        gradeRepository.updateGrade(index, grade);
     }
-    
+
     public List<Grade> getGrades() {
         return gradeRepository.getGrades();
     }
 
     public int getGradeIndex(String id) {
         for (int i = 0; i < getGrades().size(); i++) {
-            if (getGrade(i).getId().equals(id)) return i;
+            if (getGrades().get(i).getId().equals(id)) return i;
         }
         return Constants.NOT_FOUND;
-
-    }
+    } 
 
     public Grade getGradeById(String id) {
         int index = getGradeIndex(id);
-        return index == Constants.NOT_FOUND ? new Grade() : getGrade(index);
+        Grade grade = index == Constants.NOT_FOUND ? new Grade() : gradeRepository.getGrade(index);
+        return grade;
     }
 
     public void submitGrade(Grade grade) {
@@ -49,7 +44,7 @@ public class GradeService {
         if (index == Constants.NOT_FOUND) {
             addGrade(grade);
         } else {
-            updateGrade(grade, index);
+            updateGrade(index, grade);
         }
     }
 }

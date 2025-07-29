@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+@LastnameMatches(message = "Last name must match first name")
 public class User {
 
     @NotBlank(message = "First name cannot be blank")
