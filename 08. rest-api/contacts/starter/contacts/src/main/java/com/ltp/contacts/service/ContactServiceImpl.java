@@ -1,10 +1,12 @@
 package com.ltp.contacts.service;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ltp.contacts.pojo.Contact;
 import com.ltp.contacts.repository.ContactRepository;
 
 @Service
@@ -12,9 +14,6 @@ public class ContactServiceImpl implements ContactService {
 
     @Autowired
     private ContactRepository contactRepository;
-    
-
-
 
     private int findIndexById(String id) {
         return IntStream.range(0, contactRepository.getContacts().size())
@@ -23,4 +22,29 @@ public class ContactServiceImpl implements ContactService {
             .orElseThrow();
     }
 
+    @Override
+    public List<Contact> getAllContacts() {
+        return contactRepository.getContacts();
+    }
+
+    @Override
+    public Contact getContactById(String id) {
+        int index = findIndexById(id);
+        return contactRepository.getContact(index);
+    }
+
+    @Override
+    public void saveContact(Contact contact) {
+        contactRepository.saveContact(contact);
+    }
+
+    @Override
+    public void updateContact(String id, Contact contact) {
+        contactRepository.updateContact(findIndexById(id), contact);
+    }
+
+    @Override
+    public void deleteContact(String id) {
+        contactRepository.deleteContact(findIndexById(id));
+    }
 }

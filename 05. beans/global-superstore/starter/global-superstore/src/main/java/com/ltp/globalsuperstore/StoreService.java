@@ -15,7 +15,7 @@ public class StoreService {
         this.storeRepository = storeRepository;
     }
     
-    public Item getItem(int index) {
+    public Item getItem(int index) { 
         return storeRepository.getItem(index);
     }
 

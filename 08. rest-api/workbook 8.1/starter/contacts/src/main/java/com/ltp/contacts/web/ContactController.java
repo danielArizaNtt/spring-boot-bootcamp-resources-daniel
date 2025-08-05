@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ltp.contacts.exception.NoContactException;
 import com.ltp.contacts.pojo.Contact;
 import com.ltp.contacts.service.ContactService;
 
@@ -30,8 +31,19 @@ public class ContactController {
 
     @GetMapping("/contact/{id}")
     public ResponseEntity<Contact> getContact(@PathVariable String id) {
-        Contact contact = contactService.getContactById(id);
-        return new ResponseEntity<>(contact, HttpStatus.OK);
+        Contact contact = null;
+        HttpStatus status;
+        
+        try {
+            contact = contactService.getContactById(id);
+            status = HttpStatus.OK;
+        } catch (NoContactException e){
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        ResponseEntity<Contact> response = new ResponseEntity<>(contact, status);
+
+        return response;
     }
     
     @PostMapping("/contact")
@@ -42,14 +54,30 @@ public class ContactController {
 
     @PutMapping("/contact/{id}")
     public ResponseEntity<Contact> updateContact(@PathVariable String id, @RequestBody Contact contact) {
-        contactService.updateContact(id, contact);   
-        return new ResponseEntity<Contact>(contactService.getContactById(id), HttpStatus.OK);
+        HttpStatus status;
+
+        try {
+            contactService.updateContact(id, contact);
+            status = HttpStatus.OK;
+        } catch (NoContactException ex) {
+            status = HttpStatus.NOT_FOUND;
+        }
+           
+        return new ResponseEntity<Contact>(contact, status);
     }
 
     @DeleteMapping("/contact/{id}")
     public ResponseEntity<HttpStatus> deleteContact(@PathVariable String id) {
-        contactService.deleteContact(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        HttpStatus status;
+
+        try {
+            contactService.deleteContact(id);
+            status = HttpStatus.OK;
+        } catch (NoContactException ex) {
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(status);
     }
 
 
