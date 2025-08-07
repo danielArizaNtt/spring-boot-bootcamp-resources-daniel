@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +21,9 @@ import lombok.Setter;
 @NoArgsConstructor
 
 @Entity(name = "grade")
+@Table(name = "grade", uniqueConstraints = {
+    @UniqueConstraint(columnNames = { "student_id", "course_id" })
+})
 public class Grade {
 
     @Id
