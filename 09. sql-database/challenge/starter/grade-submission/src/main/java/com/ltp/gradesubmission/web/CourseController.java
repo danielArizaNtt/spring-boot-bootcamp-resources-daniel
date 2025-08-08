@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -50,12 +51,14 @@ public class CourseController {
 
     @PutMapping("/{courseId}/student/{studentId}")
     public ResponseEntity<Course> enrollStudentToCourse(@PathVariable Long courseId, @PathVariable Long studentId) {
+        courseService.addStudentToCourse(studentId, courseId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}/students")
-    public ResponseEntity<List<Student>> getEnrolledStudents(@PathVariable Long id) {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Set<Student>> getEnrolledStudents(@PathVariable Long id) {
+        Set<Student> students = courseService.getEnrolledStudents(id);
+        return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
 }
