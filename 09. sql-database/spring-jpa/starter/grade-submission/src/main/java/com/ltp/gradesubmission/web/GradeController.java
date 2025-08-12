@@ -2,7 +2,6 @@ package com.ltp.gradesubmission.web;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,17 +48,17 @@ public class GradeController {
 
     @GetMapping("/student/{studentId}")
     public ResponseEntity<List<Grade>> getStudentGrades(@PathVariable Long studentId) {
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(gradeService.getStudentGrades(studentId), HttpStatus.OK);
     }
 
     @GetMapping("/course/{courseId}")
     public ResponseEntity<List<Grade>> getCourseGrades(@PathVariable Long courseId) {
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(gradeService.getCourseGrades(courseId), HttpStatus.OK);
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<Grade>> getGrades() {
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(gradeService.getAllGrades(), HttpStatus.OK);
     }
 
 }
