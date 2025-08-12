@@ -53,10 +53,9 @@ public class GradeServiceImpl implements GradeService {
             throw new GradeNotFoundException(studentId, courseId);
         }
     }
-
     @Override
     public void deleteGrade(Long studentId, Long courseId) {
-        
+        gradeRepository.deleteByStudentIdAndCourseId(studentId, courseId);
     }
 
     @Override
