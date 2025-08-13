@@ -6,10 +6,12 @@ import com.ltp.gradesubmission.entity.Course;
 import com.ltp.gradesubmission.entity.Grade;
 import com.ltp.gradesubmission.entity.Student;
 import com.ltp.gradesubmission.exception.GradeNotFoundException;
+import com.ltp.gradesubmission.exception.StudentNotEnrolledException;
 import com.ltp.gradesubmission.repository.CourseRepository;
 import com.ltp.gradesubmission.repository.GradeRepository;
 import com.ltp.gradesubmission.repository.StudentRepository;
 import java.util.Optional;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 
@@ -22,6 +24,7 @@ public class GradeServiceImpl implements GradeService {
     GradeRepository gradeRepository;
     StudentRepository studentRepository;
     CourseRepository courseRepository;
+    CourseService courseService;
 
     
     @Override
@@ -34,6 +37,12 @@ public class GradeServiceImpl implements GradeService {
     public Grade saveGrade(Grade grade, Long studentId, Long courseId) {
         Student student = StudentServiceImpl.unwrapStudent(studentRepository.findById(studentId), studentId);
         Course course = CourseServiceImpl.unwrapCourse(courseRepository.findById(courseId), courseId);
+
+        Set<Course> enrolledCourses = student.getCourses();
+        if (!enrolledCourses.contains(course)) {
+            throw new StudentNotEnrolledException(studentId, courseId);
+        }
+
         grade.setStudent(student);
         grade.setCourse(course);
         return gradeRepository.save(grade);
