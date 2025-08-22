@@ -24,7 +24,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User saveUser(User user) {
+    public User getUser(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        User unwrappedUser = unwrapUser(user, 404L);
+        return unwrappedUser;
+    }
+
+    @Override
+    public User saveUser(User user) { // password should be encrypted in the database
+        String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
         return userRepository.save(user);
     }
 
@@ -32,5 +41,4 @@ public class UserServiceImpl implements UserService {
         if (entity.isPresent()) return entity.get();
         else throw new EntityNotFoundException(id, User.class);
     }
-    
 }

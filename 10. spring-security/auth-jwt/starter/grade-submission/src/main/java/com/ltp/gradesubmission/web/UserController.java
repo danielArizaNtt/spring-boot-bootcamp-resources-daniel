@@ -31,7 +31,8 @@ public class UserController {
 
     @PostMapping("/register")
 	public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		userService.saveUser(user);
+		return new ResponseEntity<>(HttpStatus.CREATED); // credentials do not need to be sent back and shouldn't
 	}
 
 }
